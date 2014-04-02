@@ -5,15 +5,14 @@ cdef inline int int_max(int a, int b): return a if a >= b else b
 cdef inline int int_min(int a, int b): return a if a <= b else b
 
 def warpTriangle(imgIn, srcVertices, trgVertices, triangles, imageSize):
-	channels = len(imgIn.shape) == 3 and imgIn.shape[2] or 1
 	imgOut = np.zeros(imageSize)
 	posuvX = []
 	posuvY = []
 	r = []
 	cdef double c12, c20, c01
 	cdef int x, y, w, h
-	cdef int imageWidth = imageSize[0]
-	cdef int imageHeight = imageSize[1]
+	cdef int imageWidth = imageSize[1]
+	cdef int imageHeight = imageSize[0]
 	cdef int minBoundX, minBoundY, maxBoundX, maxBoundY
 	cdef double lambdat1, lambdat2, lambdat3, lambdaArray1, lambdaArray2, lambdaArray3
 	cdef double g12X, g12Y, g20X, g20Y, g01X, g01Y
@@ -68,7 +67,7 @@ def warpTriangle(imgIn, srcVertices, trgVertices, triangles, imageSize):
 	if length != 0:
 		imgTr = np.empty(len(posuvX), dtype='double')
 		cv2.remap(imgIn.astype('double'), np.array(posuvX).astype('float32'), np.array(posuvY).astype('float32'), cv2.INTER_LINEAR, imgTr, borderMode=cv2.BORDER_REPLICATE)
-		imgTr /= 256
-	for i in range(length):
+		#imgTr /= 256
+	for i in xrange(length):
 		imgOut[r[i]] = imgTr[i]
 	return imgOut
