@@ -1,22 +1,24 @@
 piecewisewarp
 =============
 
-Cython implementation of piecewise warp
+Cython implementation of piecewise affine warp
 
-How to use?
-=============
+How to build
+============
 
-Compile PiecewiseWarpCython.pyx:
+Download the code, cd to a project root and run:
 
 	python setup.py build_ext --inplace
 	
-See example.py for an example of usage.
-
-Example
-=============
-
-To run the example go to /example directory and run:
-
-	python example.py
+This command will create file `pwa.so` that may be imported 
+into Python directly.
 	
-Result of warp is stored in result.bmp.
+Example
+=======
+
+You can find example in example/example.py. Try it out with:
+
+    cd example
+	python example.py
+
+Result of the warp will be stored in `result.bmp`.
