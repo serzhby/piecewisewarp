@@ -1,6 +1,7 @@
 
 import numpy as np
 import cv2
+import matplotlib.delaunay as triang
 
 cdef inline int int_max(int a, int b): return a if a >= b else b
 cdef inline int int_min(int a, int b): return a if a <= b else b
@@ -79,3 +80,30 @@ def warpTriangle(imgIn, srcVertices, trgVertices, triangles, imageSize):
     for i in xrange(length):
         imgOut[r[i]] = imgTr[i]
     return imgOut
+
+
+def delaunay(vector):
+    tri = triang.delaunay(vector[:, 0], vector[:, 1])[2]
+    return tri
+
+
+def warp(im, pts_from, pts_to):
+    """
+    Warp image w.r.t. source and target point sets.
+
+    Params
+    ------
+    im : ndarray
+        Image to warp
+    pts_from : ndarray
+        Source point set as Nx2 array with ij-points in rows.
+    pts_to : ndarray
+        Target point set as Nx2 array with ij-points in rows.
+    
+    Returns
+    output : ndarray
+        Wrapped image of the same size as im
+    """
+    triangles = delaunay(pts_to)
+    return warpTriangle(im, pts_from[:, [1, 0]], pts_to[:, [1, 0]],
+                        triangles, im.shape)
